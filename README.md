@@ -1,10 +1,10 @@
-**Practice on Testing Using Cypress**
+# **Practice on Testing Using Cypress**
 
 This repository contains projects and exercises focused on testing with Cypress.
 
 Each branch hosts a unique test practice project to explore different scenarios and best practices for effective testing.
 
-**# ** Projects Overview\*\*\*\*
+## **Projects Overview**
 
 ## Each branch contains:
 
@@ -22,7 +22,7 @@ Each branch hosts a unique test practice project to explore different scenarios 
 
 - Vite: A fast and lightweight build tool for modern web applications.
 
-> **Why Cypress?**
+> ## **Why Cypress?**
 
 > This project focuses on basic-level learning and practicing unit and end-to-end testing. Cypress is an excellent choice for this purpose because it offers:
 
