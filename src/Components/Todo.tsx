@@ -32,6 +32,16 @@ const StyledInput = styled.input`
   border-bottom: 1px solid rgb(0, 0, 0);
   padding: 5px;
 `;
+const EditInput = styled.input`
+  font-size: 1em;
+  text-align: center;
+  outline: none;
+  border: none;
+  padding: 5px;
+  border-radius: 5px;
+  width: 50%;
+  margin-left: 10px;
+`;
 const StyledCheckButton = styled.button`
   margin-left: 30px;
   width: 80px;
@@ -122,26 +132,46 @@ interface ITodo {
 const Todo = () => {
   const [todos, setTodos] = useState<ITodo[]>([]);
   const [task, setTask] = useState<string>("");
+  const [isEditing, setIsEditing] = useState<string | null>(null);
+  const [editTask, setEditTask] = useState<string>("");
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleTaskSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!task.trim()) return;
     setTodos([...todos, { id: uuidv4(), task, isCompleted: false }]);
     setTask("");
   };
 
-  const handleComplete = (id: string) => {
+  const handleCompletedTasks = (id: string) => {
     const updatedTodos = todos.map((todo) =>
       todo.id === id ? { ...todo, isCompleted: !todo.isCompleted } : todo
     );
     setTodos(updatedTodos);
   };
 
+  const handleEdit = (id: string, task: string) => {
+    setIsEditing(id);
+    setEditTask(task);
+  };
+
+  const handleEditSave = (id: string) => {
+    const updatedTodos = todos.map((todo) =>
+      todo.id === id ? { ...todo, task: editTask } : todo
+    );
+    setTodos(updatedTodos);
+    setIsEditing(null);
+    setEditTask("");
+  };
+
+  const handleDelete = (id: string) => {
+    setTodos(todos.filter((todo) => todo.id !== id));
+  };
+
   return (
     <Wrapper>
-      <Title>To do List</Title>
+      <Title>To-do List</Title>
       <SemiTitle>Enter Task</SemiTitle>
-      <Form onSubmit={handleSubmit}>
+      <Form onSubmit={handleTaskSubmit}>
         <InputDiv>
           <StyledInput
             type="text"
@@ -158,13 +188,41 @@ const Todo = () => {
             <TodoTaskDiv>
               <CompletedButton
                 completed={todo.isCompleted}
-                onClick={() => handleComplete(todo.id)}
+                onClick={() => handleCompletedTasks(todo.id)}
               />
-              <TodoText completed={todo.isCompleted}>{todo.task}</TodoText>
+              {isEditing === todo.id ? (
+                <EditInput
+                  type="text"
+                  value={editTask}
+                  onChange={(e) => setEditTask(e.target.value)}
+                  autoFocus
+                />
+              ) : (
+                <TodoText completed={todo.isCompleted}>{todo.task}</TodoText>
+              )}
             </TodoTaskDiv>
             <TodoActionsDiv>
-              <StyledCheckButton>Edit</StyledCheckButton>
-              <StyledCheckButton>Delete</StyledCheckButton>
+              {isEditing === todo.id ? (
+                <>
+                  <StyledCheckButton onClick={() => handleEditSave(todo.id)}>
+                    Save
+                  </StyledCheckButton>
+                  <StyledCheckButton onClick={() => setIsEditing(null)}>
+                    Cancel
+                  </StyledCheckButton>
+                </>
+              ) : (
+                <>
+                  <StyledCheckButton
+                    onClick={() => handleEdit(todo.id, todo.task)}
+                  >
+                    Edit
+                  </StyledCheckButton>
+                  <StyledCheckButton onClick={() => handleDelete(todo.id)}>
+                    Delete
+                  </StyledCheckButton>
+                </>
+              )}
             </TodoActionsDiv>
           </TodoDiv>
         ))}
