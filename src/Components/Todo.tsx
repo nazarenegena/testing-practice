@@ -169,7 +169,7 @@ const Todo = () => {
 
   return (
     <Wrapper>
-      <Title>To-do List</Title>
+      <Title data-testid="todo-title">To-do List</Title>
       <SemiTitle>Enter Task</SemiTitle>
       <Form onSubmit={handleTaskSubmit}>
         <InputDiv>
@@ -182,7 +182,7 @@ const Todo = () => {
         </InputDiv>
         <StyledButton type="submit">Add</StyledButton>
       </Form>
-      <div>
+      <div data-testid="todos">
         {todos.map((todo) => (
           <TodoDiv key={todo.id}>
             <TodoTaskDiv>
